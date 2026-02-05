@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SK TOOLKIT</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#0e0e0e;
+  --card:#1c1c1c;
+  --neon1:#ff9800;
+  --neon2:#ff4ecd;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Poppins, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body{
+  background:linear-gradient(180deg,#0b0b0b,#151515);
+  color:#fff;
+  min-height:100vh;
+  overflow-y:auto; /* ✅ scrolling enabled */
+}
+
+/* HEADER */
+.header{
+  padding:26px 18px 10px;
+  text-align:center;
+}
+
+.header h1{
+  font-size:2.2rem;
+  font-weight:700;
+  background:linear-gradient(90deg,var(--neon1),var(--neon2));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.header p{
+  margin-top:6px;
+  font-size:.9rem;
+  opacity:.7;
+}
+
+/* GRID */
+.grid{
+  padding:16px;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:16px;
+}
+
+/* CARD */
+.card{
+  background:var(--card);
+  border-radius:18px;
+  padding:24px 16px;
+  text-align:center;
+  position:relative;
+  box-shadow:
+    0 8px 18px rgba(0,0,0,.6),
+    inset 0 0 0 rgba(255,255,255,.05);
+  transition:.25s;
+}
+
+.card:active{
+  transform:scale(.96);
+}
+
+/* ICON */
+.icon{
+  font-size:36px;
+  margin-bottom:12px;
+}
+
+/* TITLE */
+.card h3{
+  font-size:.95rem;
+  font-weight:600;
+}
+
+/* BADGE */
+.badge{
+  position:absolute;
+  top:-10px;
+  right:10px;
+  background:#ff1744;
+  color:#fff;
+  font-size:.65rem;
+  padding:4px 10px;
+  border-radius:20px;
+  box-shadow:0 0 12px #ff1744;
+}
+
+/* FOOTER */
+.footer{
+  text-align:center;
+  font-size:0.75rem;
+  opacity:0.6;
+  padding:26px 12px 30px;
+  letter-spacing:.5px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <h1>SK TOOLKIT</h1>
+  <p>Welcome to our site!</p>
+</div>
+
+<!-- GRID -->
+<div class="grid">
+
+  <a href="db.html" style="text-decoration:none;color:inherit;">
+  <div class="card">
+    <div class="icon">🗄️</div>
+    <h3>Pak Sim Details</h3>
+  </div>
+</a>
+
+  <div class="card">
+    <div class="icon">✈️</div>
+    <h3>SMS Tool</h3>
+  </div>
+
+  <div class="card">
+    <div class="icon">🖥️</div>
+    <h3>Free Window RDP</h3>
+  </div>
+
+  <div class="card">
+    <div class="icon">📺</div>
+    <h3>Jazz TV</h3>
+  </div>
+
+  <div class="card">
+    <div class="icon">🎵</div>
+    <h3>TikTok Downloader</h3>
+  </div>
+
+  <div class="card">
+    <div class="icon">🎧</div>
+    <h3>Spotify Downloader</h3>
+  </div>
+
+  <div class="card">
+    <div class="icon">📖</div>
+    <h3>Hadith</h3>
+  </div>
+
+  <div class="card">
+    <div class="icon">🔍</div>
+    <h3>Vehicle</h3>
+  </div>
+
+  <!-- extra cards to test scrolling -->
+  <div class="card">
+    <div class="icon">⚙️</div>
+    <h3>More Tools</h3>
+  </div>
+
+  <div class="card">
+    <div class="icon">🚀</div>
+    <h3>Coming Soon</h3>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  © 2026 • SK TOOLKIT. All Rights Reserved.
+</div>
+
+</body>
+</html>

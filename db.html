@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SK SIMDATA | GLOBAL TRACKER</title>
+
+<!-- NEON FONTS -->
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --neon:#00ff41;
+  --yellow:#ffee00;
+  --red:#ff003c;
+  --bg:#050505;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:radial-gradient(circle at top,#022b12,#000);
+  font-family:'Share Tech Mono',monospace;
+  color:var(--neon);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:12px;
+  overflow-x:hidden;
+  user-select:none;
+}
+
+/* MATRIX */
+#matrix-canvas{
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  opacity:.18;
+}
+
+/* CARD */
+.vault-frame{
+  width:100%;
+  max-width:680px;
+  padding:3px;
+  border-radius:18px;
+  background:linear-gradient(135deg,var(--neon),#003b12);
+  box-shadow:0 0 40px rgba(0,255,65,.5);
+}
+
+.vault-inner{
+  background:rgba(0,10,0,.9);
+  border-radius:15px;
+  padding:22px;
+}
+
+/* TITLE */
+h1{
+  text-align:center;
+  font-family:'Orbitron',sans-serif;
+  font-size:2.3rem;
+  letter-spacing:3px;
+  margin:0 0 10px;
+  text-shadow:0 0 10px var(--neon),0 0 30px var(--neon);
+}
+
+/* STATUS */
+.system-status{
+  display:flex;
+  justify-content:space-between;
+  font-size:.75rem;
+  border-bottom:1px solid #0f3;
+  padding-bottom:6px;
+  margin-bottom:16px;
+}
+
+/* INPUT */
+.input-zone{
+  display:flex;
+  gap:10px;
+  margin-bottom:16px;
+}
+
+input{
+  flex:1;
+  padding:14px;
+  background:#000;
+  border:1px solid var(--neon);
+  color:var(--neon);
+  font-size:1rem;
+  outline:none;
+}
+
+button{
+  padding:0 22px;
+  background:linear-gradient(145deg,var(--neon),#00b530);
+  border:none;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+/* TERMINAL */
+#terminal{
+  display:none;
+  height:150px;
+  background:#000;
+  border:1px solid #033;
+  padding:10px;
+  font-size:.8rem;
+  overflow-y:auto;
+  margin-bottom:15px;
+}
+
+.log-line{margin:3px 0}
+.l-process{color:#888}
+.l-warn{color:var(--yellow)}
+.l-err{color:var(--red)}
+.l-success{color:var(--neon);font-weight:bold}
+
+/* RESULTS */
+#results-container{display:none}
+
+.data-card{
+  background:rgba(0,30,0,.85);
+  border:1px solid var(--neon);
+  margin-bottom:12px;
+}
+
+.card-header{
+  background:rgba(0,255,65,.12);
+  padding:8px 12px;
+  display:flex;
+  justify-content:space-between;
+  font-size:.85rem;
+}
+
+.card-body{padding:12px}
+
+.data-row{
+  display:flex;
+  gap:6px;
+  border-bottom:1px dotted #244;
+  padding:4px 0;
+}
+
+.d-label{
+  width:110px;
+  color:var(--yellow);
+  font-size:.8rem;
+}
+
+.d-value{
+  flex:1;
+  color:#fff;
+  word-break:break-all;
+  font-size:.8rem;
+}
+
+/* FOOTER */
+.footer{
+  text-align:center;
+  font-size:.65rem;
+  margin-top:10px;
+  opacity:.8;
+}
+
+@media(max-width:600px){
+  h1{font-size:1.9rem}
+  .system-status{flex-direction:column;gap:4px;text-align:center}
+  .input-zone{flex-direction:column}
+  button{padding:14px}
+}
+</style>
+</head>
+
+<body oncontextmenu="return false">
+
+<canvas id="matrix-canvas"></canvas>
+
+<div class="vault-frame">
+<div class="vault-inner">
+
+<h1>SK SIMDATA</h1>
+
+<div class="system-status">
+  <span>CONN: SECURE</span>
+  <span>IP: HIDDEN</span>
+  <span>VER: 4.0.2</span>
+</div>
+
+<div class="input-zone">
+  <input type="text" id="target" placeholder="ENTER NUMBER OR CNIC" maxlength="15">
+  <button onclick="runExploit()">SCAN</button>
+</div>
+
+<div id="terminal"></div>
+<div id="results-container"></div>
+
+<div class="footer">
+© SK SIMDATA — All Rights Reserved
+</div>
+
+</div>
+</div>
+
+<!-- 🔒 PROTECTION LAYER -->
+<script>
+document.addEventListener("keydown", e=>{
+  if(
+    e.key==="F12" ||
+    (e.ctrlKey && e.shiftKey && ["I","J","C"].includes(e.key)) ||
+    (e.ctrlKey && e.key==="U")
+  ){
+    e.preventDefault();
+    return false;
+  }
+});
+
+// DevTools Detect
+(function(){
+  setInterval(()=>{
+    if(window.outerWidth-window.innerWidth>160 || window.outerHeight-window.innerHeight>160){
+      document.body.innerHTML="<h2 style='color:red;text-align:center;margin-top:40vh'>ACCESS BLOCKED</h2>";
+    }
+  },1000);
+})();
+</script>
+
+<script>
+/* MATRIX EFFECT */
+const c=document.getElementById("matrix-canvas"),x=c.getContext("2d");
+function rs(){c.width=innerWidth;c.height=innerHeight}
+rs();addEventListener("resize",rs);
+const ch="01SKDATA",dr=Array(Math.floor(c.width/20)).fill(1);
+setInterval(()=>{
+x.fillStyle="rgba(0,0,0,.05)";
+x.fillRect(0,0,c.width,c.height);
+x.fillStyle="#0f0";x.font="15px monospace";
+dr.forEach((y,i)=>{
+const t=ch[Math.floor(Math.random()*ch.length)];
+x.fillText(t,i*20,y*20);
+dr[i]=y*20>c.height&&Math.random()>.97?0:y+1;
+});
+},50);
+
+/* CORE LOGIC */
+const A="https://sim.f-a-k.workers.dev/?q=";
+const t=document.getElementById("terminal");
+const r=document.getElementById("results-container");
+const i=document.getElementById("target");
+
+function L(m,s="process"){
+const d=document.createElement("div");
+d.className="log-line l-"+s;
+d.textContent="> "+m;
+t.appendChild(d);t.scrollTop=t.scrollHeight;
+}
+
+const W=m=>new Promise(r=>setTimeout(r,m));
+
+async function runExploit(){
+const q=i.value.replace(/\D/g,"");
+if(q.length<11){alert("INVALID INPUT");return;}
+t.innerHTML="";t.style.display="block";r.style.display="none";r.innerHTML="";
+L("INITIALIZING...");await W(400);
+try{
+L("FETCHING DATA...","warn");
+const f=await fetch(A+q);const j=await f.json();
+if(j.status!=="success")throw 0;
+L("SUCCESS","success");await W(300);R(j.data);
+}catch(e){L("ERROR","err")}
+}
+
+function R(d){
+t.style.display="none";r.style.display="block";
+const a=Array.isArray(d)?d:[d];let h="";
+a.forEach((o,n)=>{
+h+=`<div class="data-card"><div class="card-header"><span>RECORD ${n+1}</span><span>OK</span></div><div class="card-body">`;
+for(const k in o){
+h+=`<div class="data-row"><span class="d-label">${k.toUpperCase()}</span><span class="d-value">${o[k]}</span></div>`;
+}
+h+="</div></div>";
+});
+r.innerHTML=h;
+}
+
+i.addEventListener("keypress",e=>{if(e.key==="Enter")runExploit()});
+
+console.log("%cSK SIMDATA | PROTECTED","color:#0f0;font-size:14px");
+</script>
+</body>
+</html>
