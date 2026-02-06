@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SK TOOLIT</title>    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, #1a237e, #4a148c);
+            text-align: center;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        h2 {
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        #dzikirText {
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 10px;
+            text-transform: uppercase;
+        }
+
+        #counter {
+            font-size: 60px;
+            font-weight: bold;
+            margin: 15px 0;
+            color: #ffeb3b;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .circle-button {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: none;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        #tasbihButton {
+            background: #ff9800;
+            color: white;
+        }
+
+        #tasbihButton:active {
+            transform: scale(0.9);
+            background: #f57c00;
+        }
+
+        #resetButton {
+            background: #d32f2f;
+            color: white;
+        }
+
+        #resetButton:active {
+            transform: scale(0.9);
+            background: #b71c1c;
+        }
+
+        @media (max-width: 400px) {
+            .circle-button {
+                width: 70px;
+                height: 70px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>SK TOOLKIT</h2>
+        <h1>TASBEEH COUNTER</h1>
+        
+        <!-- Select Dzikir -->
+        <select id="dzikirSelect">
+            <option value="Subhanallah">Subhanallah</option>
+            <option value="Alhamdulillah">Alhamdulillah</option>
+            <option value="Allahu Akbar">Allahu Akbar</option>
+            <option value="La ilaha illallah">La ilaha illallah</option>
+            <option value="Astaghfirullah">Astaghfirullah</option>
+            <option value="Sallallahu alayhi wasallam">Sallallahu alayhi wasallam</option>
+        </select>
+
+        <!-- Target Count -->
+        <input type="number" id="targetHitungan" placeholder="Enter target count" min="1">
+        
+        <!-- Display Count -->
+        <div id="dzikirText">Subhanallah</div>
+        <div id="counter">0</div>
+        
+        <!-- Buttons -->
+        <div class="button-container">
+            <button id="tasbihButton" class="circle-button">Tap</button>
+            <button id="resetButton" class="circle-button">Reset</button>
+        </div>
+    </div>
+
+    <script>
+        let count = 0;
+        let target = 0;
+
+        // Get elements
+        const dzikirSelect = document.getElementById("dzikirSelect");
+        const dzikirText = document.getElementById("dzikirText");
+        const counter = document.getElementById("counter");
+        const tasbihButton = document.getElementById("tasbihButton");
+        const resetButton = document.getElementById("resetButton");
+        const targetHitungan = document.getElementById("targetHitungan");
+        const container = document.querySelector(".container");
+
+        // Change dzikir based on selection
+        dzikirSelect.addEventListener("change", function () {
+            dzikirText.textContent = dzikirSelect.value;
+            count = 0;
+            counter.textContent = count;
+        });
+
+        // Increase count when button is clicked
+        tasbihButton.addEventListener("click", function () {
+            count++;
+            counter.textContent = count;
+
+            // Check if target is reached
+            if (target > 0 && count >= target) {
+                triggerVibration();
+                alert("🎉 Congratulations! You have completed your target.");
+                count = 0;
+                counter.textContent = count;
+            }
+        });
+
+        // Set target count
+        targetHitungan.addEventListener("change", function () {
+            target = parseInt(targetHitungan.value);
+        });
+
+        // Reset count
+        resetButton.addEventListener("click", function () {
+            count = 0;
+            counter.textContent = count;
+        });
+
+        // Vibration function
+        function triggerVibration() {
+            if ("vibrate" in navigator) {
+                navigator.vibrate([300, 100, 300]); // Vibrate twice
+            }
+
+            // Shake effect
+            container.style.animation = "shake 0.3s";
+            setTimeout(() => {
+                container.style.animation = "";
+            }, 300);
+        }
+
+        // Shake animation
+        const style = document.createElement("style");
+        style.innerHTML = `
+            @keyframes shake {
+                0% { transform: translateX(0); }
+                25% { transform: translateX(-5px); }
+                50% { transform: translateX(5px); }
+                75% { transform: translateX(-5px); }
+                100% { transform: translateX(0); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+  </html>
+  
