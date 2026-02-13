@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SK TEMP MAIL</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<style>
+:root{
+    --accent:#ff2e2e;
+    --accent-soft:rgba(255,46,46,.25);
+    --bg:#0b0d12;
+    --glass:rgba(255,255,255,.06);
+    --border:rgba(255,255,255,.15);
+    --text:#ffffff;
+    --muted:#9aa4b2;
+    --radius:18px;
+    --blur:16px;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:'Inter',sans-serif;
+    background:
+        radial-gradient(circle at top,#1a1f2e,#05060a 60%);
+    color:var(--text);
+    min-height:100vh;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    padding:24px;
+}
+
+.main-header{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.main-header h1{
+    font-size:2.6rem;
+    font-weight:800;
+    letter-spacing:1px;
+    color:var(--accent);
+    text-shadow:0 0 25px var(--accent-soft);
+}
+
+.card{
+    background:var(--glass);
+    backdrop-filter:blur(var(--blur));
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:24px;
+    margin-bottom:22px;
+    box-shadow:0 20px 40px rgba(0,0,0,.45);
+}
+
+#email-display{
+    background:#000;
+    border:1px dashed var(--accent);
+    border-radius:14px;
+    padding:16px;
+    font-size:1.1rem;
+    text-align:center;
+    color:var(--accent);
+    word-break:break-all;
+    box-shadow:inset 0 0 12px var(--accent-soft);
+}
+
+.button-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    gap:14px;
+    margin-top:18px;
+}
+
+.btn{
+    border-radius:14px;
+    padding:13px;
+    font-weight:600;
+    border:1px solid var(--border);
+    background:transparent;
+    color:var(--text);
+    cursor:pointer;
+    transition:.25s;
+}
+
+.btn i{
+    margin-right:6px;
+}
+
+.btn:hover:not(:disabled){
+    transform:translateY(-2px);
+    box-shadow:0 10px 20px rgba(0,0,0,.4);
+}
+
+.btn.primary{
+    background:linear-gradient(135deg,#ff2e2e,#ff6a6a);
+    border:none;
+    color:#000;
+}
+
+.btn.primary:hover{
+    box-shadow:0 0 25px var(--accent-soft);
+}
+
+.btn:disabled{
+    opacity:.4;
+    cursor:not-allowed;
+}
+
+.inbox-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
+}
+
+.inbox-header h2{
+    font-size:1.2rem;
+    margin:0;
+}
+
+#inbox-count{
+    font-size:.9rem;
+    color:var(--muted);
+}
+
+.empty-inbox{
+    text-align:center;
+    padding:30px 10px;
+    color:var(--muted);
+    font-size:.95rem;
+}
+
+.footer{
+    text-align:center;
+    margin-top:35px;
+    padding-top:18px;
+    border-top:1px solid var(--border);
+}
+
+.footer h2{
+    margin:0;
+    font-size:1.3rem;
+    color:var(--accent);
+}
+
+.channel-box{
+    margin-top:14px;
+    display:inline-block;
+    padding:12px 24px;
+    border-radius:30px;
+    border:1px solid var(--border);
+    background:var(--glass);
+    transition:.25s;
+}
+
+.channel-box a{
+    text-decoration:none;
+    color:var(--text);
+    font-weight:600;
+}
+
+.channel-box:hover{
+    transform:translateY(-3px);
+    box-shadow:0 15px 30px rgba(0,0,0,.4);
+}
+
+#toast{
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#000;
+    color:#fff;
+    padding:12px 22px;
+    border-radius:14px;
+    border:1px solid var(--accent);
+    display:none;
+    z-index:999;
+    box-shadow:0 10px 30px rgba(0,0,0,.6);
+}
+
+@media(max-width:480px){
+    .main-header h1{
+        font-size:2.1rem;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header class="main-header">
+    <h1>SK TEMP MAIL</h1>
+</header>
+
+<div class="card">
+    <p id="email-display">Awaiting Activation...</p>
+
+    <div class="button-grid">
+        <button id="generate-btn" class="btn primary">
+            <i class="bi bi-plus-circle"></i> New Email
+        </button>
+
+        <button id="copy-btn" class="btn" disabled>
+            <i class="bi bi-clipboard"></i> Copy
+        </button>
+
+        <button id="refresh-btn" class="btn" disabled>
+            <i class="bi bi-arrow-repeat"></i> Refresh
+        </button>
+    </div>
+</div>
+
+<div class="card">
+    <div class="inbox-header">
+        <h2><i class="bi bi-envelope"></i> Inbox</h2>
+        <span id="inbox-count">0 messages</span>
+    </div>
+
+    <div id="inbox-container">
+        <div class="empty-inbox">
+            No messages yet. Generate an email to begin.
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    <h2>Learn With Avengers</h2>
+
+    <div class="channel-box">
+        <a href="https://whatsapp.com/channel/0029VbBotmoDJ6H33Zsg6d0l" target="_blank">
+            <i class="bi bi-whatsapp"></i> Join WhatsApp Channel
+        </a>
+    </div>
+
+    <p style="margin-top:10px;color:var(--muted)">
+        © Spider-Style Temp Mail
+    </p>
+</div>
+
+</div>
+
+<div id="toast"></div>
+
+<!-- JS SAME AS YOUR ORIGINAL -->
+<script>
+const API_BASE_URL = 'https://temp-mail-fak.jokerkeep057.workers.dev/';
+const API_KEY = '32563';
+
+const emailDisplay = document.getElementById('email-display');
+const generateBtn = document.getElementById('generate-btn');
+const copyBtn = document.getElementById('copy-btn');
+const refreshBtn = document.getElementById('refresh-btn');
+const inboxContainer = document.getElementById('inbox-container');
+const inboxCount = document.getElementById('inbox-count');
+const toastEl = document.getElementById('toast');
+
+let currentEmail = null;
+let sessionId = null;
+
+function showToast(msg){
+    toastEl.textContent = msg;
+    toastEl.style.display="block";
+    setTimeout(()=>toastEl.style.display="none",3000);
+}
+
+function updateUI(){
+    if(currentEmail){
+        emailDisplay.textContent=currentEmail;
+        copyBtn.disabled=false;
+        refreshBtn.disabled=false;
+    }
+}
+
+async function generateEmail(){
+    try{
+        const res = await fetch(`${API_BASE_URL}?key=${API_KEY}&action=generate`);
+        const data = await res.json();
+        currentEmail=data.emailAddress;
+        sessionId=data.sessionId;
+        updateUI();
+        showToast("New email generated");
+    }catch{
+        showToast("Failed to generate email");
+    }
+}
+
+function copyEmail(){
+    navigator.clipboard.writeText(currentEmail);
+    showToast("Copied to clipboard");
+}
+
+generateBtn.onclick=generateEmail;
+copyBtn.onclick=copyEmail;
+</script>
+
+</body>
+</html>
