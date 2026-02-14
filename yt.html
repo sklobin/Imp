@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>YouTube MP3 Downloader</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+  font-family:Arial,Helvetica,sans-serif;
+  color:#fff;
+}
+.box{
+  width:100%;
+  max-width:420px;
+  background:rgba(255,255,255,0.08);
+  padding:25px;
+  border-radius:16px;
+  box-shadow:0 20px 40px rgba(0,0,0,.4);
+  text-align:center;
+}
+h1{
+  margin-bottom:20px;
+  font-size:22px;
+}
+input{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:10px;
+  outline:none;
+  font-size:15px;
+}
+button{
+  margin-top:15px;
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:10px;
+  background:#00e676;
+  color:#000;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+button:hover{
+  background:#00c853;
+}
+#status{
+  margin-top:15px;
+  font-size:14px;
+  opacity:.9;
+}
+.footer{
+  margin-top:20px;
+  font-size:12px;
+  opacity:.6;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+  <h1>YouTube MP3 Downloader</h1>
+
+  <input type="text" id="yturl" placeholder="Paste YouTube link here">
+
+  <button onclick="download()">Download MP3</button>
+
+  <div id="status"></div>
+
+  <div class="footer">Fast • Free • No Login</div>
+</div>
+
+<script>
+// 🔑 YAHAN APNI API KEY DALO
+const API_KEY = "YOUR_API_KEY_HERE";
+
+// 🔗 API ENDPOINT
+const API_ENDPOINT = "https://apis.sandarux.sbs/api/download/savetube";
+
+function download(){
+  const url = document.getElementById("yturl").value.trim();
+  const status = document.getElementById("status");
+
+  if(!url){
+    status.innerText = "❌ YouTube link daalo";
+    return;
+  }
+
+  status.innerText = "⏳ Processing...";
+
+  const apiUrl = `${API_ENDPOINT}?apikey=${API_KEY}&url=${encodeURIComponent(url)}&format=mp3`;
+
+  // direct download
+  window.open(apiUrl, "_blank");
+
+  status.innerText = "✅ Download started";
+}
+</script>
+
+</body>
+</html>
