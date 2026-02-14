@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>YouTube MP3 Downloader</title>
+<title>YouTube MP4 Downloader</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body{
   margin:0;
-  height:100vh;
+  min-height:100vh;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -16,17 +16,17 @@ body{
   font-family:Arial,Helvetica,sans-serif;
   color:#fff;
 }
-.box{
+.container{
   width:100%;
-  max-width:420px;
+  max-width:430px;
   background:rgba(255,255,255,0.08);
-  padding:25px;
-  border-radius:16px;
-  box-shadow:0 20px 40px rgba(0,0,0,.4);
-  text-align:center;
+  padding:22px;
+  border-radius:18px;
+  box-shadow:0 25px 45px rgba(0,0,0,.5);
 }
 h1{
-  margin-bottom:20px;
+  text-align:center;
+  margin-bottom:18px;
   font-size:22px;
 }
 input{
@@ -38,71 +38,123 @@ input{
   font-size:15px;
 }
 button{
-  margin-top:15px;
   width:100%;
+  margin-top:14px;
   padding:14px;
   border:none;
   border-radius:10px;
-  background:#00e676;
+  background:#ff9800;
   color:#000;
   font-size:16px;
   font-weight:bold;
   cursor:pointer;
 }
-button:hover{
-  background:#00c853;
-}
+button:hover{ background:#fb8c00; }
+
 #status{
-  margin-top:15px;
+  margin-top:12px;
   font-size:14px;
-  opacity:.9;
+  text-align:center;
 }
-.footer{
-  margin-top:20px;
-  font-size:12px;
-  opacity:.6;
+
+.result{
+  margin-top:18px;
+  background:rgba(0,0,0,.35);
+  border-radius:14px;
+  overflow:hidden;
+  display:none;
 }
+.thumb{
+  width:100%;
+  height:220px;
+  object-fit:cover;
+}
+.info{
+  padding:14px;
+}
+.title{
+  font-size:15px;
+  font-weight:bold;
+  margin-bottom:6px;
+}
+.meta{
+  font-size:13px;
+  opacity:.8;
+  margin-bottom:12px;
+}
+.download{
+  display:block;
+  text-align:center;
+  padding:12px;
+  border-radius:10px;
+  background:#00e676;
+  color:#000;
+  font-weight:bold;
+  text-decoration:none;
+}
+.download:hover{ background:#00c853; }
 </style>
 </head>
 
 <body>
 
-<div class="box">
-  <h1>YouTube MP3 Downloader</h1>
+<div class="container">
+  <h1>YouTube MP4 Downloader</h1>
 
-  <input type="text" id="yturl" placeholder="Paste YouTube link here">
+  <input id="yturl" placeholder="Paste YouTube link">
 
-  <button onclick="download()">Download MP3</button>
+  <button onclick="getVideo()">Get Video</button>
 
   <div id="status"></div>
 
-  <div class="footer">Fast • Free • No Login</div>
+  <div class="result" id="result">
+    <img id="thumb" class="thumb">
+    <div class="info">
+      <div class="title" id="title"></div>
+      <div class="meta" id="meta"></div>
+      <a id="download" class="download" target="_blank">⬇ Download MP4</a>
+    </div>
+  </div>
 </div>
 
 <script>
-// 🔑 YAHAN APNI API KEY DALO
-const API_KEY = "apify_api_2ualdqsVehIh7Dc5YEC5rmPBYqnAvt059Xoz";
-
-// 🔗 API ENDPOINT
+const API_KEY = "darknero";
 const API_ENDPOINT = "https://apis.sandarux.sbs/api/download/savetube";
 
-function download(){
+function getVideo(){
   const url = document.getElementById("yturl").value.trim();
   const status = document.getElementById("status");
+  const result = document.getElementById("result");
 
   if(!url){
     status.innerText = "❌ YouTube link daalo";
     return;
   }
 
-  status.innerText = "⏳ Processing...";
+  status.innerText = "⏳ Fetching video info...";
+  result.style.display = "none";
 
-  const apiUrl = `${API_ENDPOINT}?apikey=${API_KEY}&url=${encodeURIComponent(url)}&format=mp3`;
+  fetch(`${API_ENDPOINT}?apikey=${API_KEY}&url=${encodeURIComponent(url)}&format=mp4`)
+    .then(res => res.json())
+    .then(data => {
+      if(!data.status){
+        status.innerText = "❌ Video fetch nahi ho saka";
+        return;
+      }
 
-  // direct download
-  window.open(apiUrl, "_blank");
+      document.getElementById("thumb").src = data.thumbnail;
+      document.getElementById("title").innerText = data.title;
+      document.getElementById("meta").innerText =
+        `Duration: ${data.duration}s • Format: ${data.format.toUpperCase()}`;
 
-  status.innerText = "✅ Download started";
+      document.getElementById("download").href = data.downloadUrl;
+
+      result.style.display = "block";
+      status.innerText = "✅ Ready to download";
+    })
+    .catch(() => {
+      status.innerText = "❌ API error / limit issue";
+    });
 }
 </script>
 
