@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Full Screen Weather</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Poppins,Segoe UI,sans-serif;
+}
+body{
+  width:100vw;
+  height:100vh;
+  overflow:hidden;
+  background:linear-gradient(120deg,#2980b9,#6dd5fa);
+  color:#fff;
+}
+
+/* FULL SCREEN CARD */
+#card{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  background:rgba(255,255,255,0.15);
+  backdrop-filter: blur(18px);
+  text-align:center;
+}
+
+/* SEARCH BAR */
+#search{
+  position:absolute;
+  top:25px;
+  width:90%;
+  max-width:420px;
+  display:flex;
+  gap:10px;
+}
+#search input{
+  flex:1;
+  padding:14px;
+  border:none;
+  border-radius:14px;
+  outline:none;
+  font-size:16px;
+}
+#search button{
+  padding:14px 18px;
+  border:none;
+  border-radius:14px;
+  background:linear-gradient(135deg,#56ccf2,#2f80ed);
+  color:#fff;
+  font-weight:600;
+  cursor:pointer;
+}
+
+/* WEATHER INFO */
+#city{
+  font-size:34px;
+  font-weight:600;
+}
+#temp{
+  font-size:86px;
+  font-weight:700;
+  margin:10px 0;
+}
+#desc{
+  font-size:20px;
+  opacity:.9;
+  text-transform:capitalize;
+}
+
+/* RAIN */
+.drop{
+  position:absolute;
+  top:-20px;
+  width:2px;
+  height:18px;
+  background:rgba(255,255,255,0.5);
+  animation: rain linear infinite;
+}
+@keyframes rain{
+  to{ transform: translateY(110vh); }
+}
+</style>
+</head>
+
+<body>
+
+<div id="card">
+  <div id="search">
+    <input id="cityInput" placeholder="Enter city name">
+    <button id="btn">Search</button>
+  </div>
+
+  <h1 id="city">Colombo</h1>
+  <div id="temp">--°C</div>
+  <div id="desc">Loading...</div>
+</div>
+
+<script>
+const API_KEY = "54c2826e18d18f7f09a1a4ea16c3af18";
+
+const cityInput = document.getElementById("cityInput");
+const btn = document.getElementById("btn");
+const cityEl = document.getElementById("city");
+const tempEl = document.getElementById("temp");
+const descEl = document.getElementById("desc");
+
+let rainInterval;
+
+// BACKGROUND CHANGE
+function changeBackground(type){
+  clearRain();
+
+  if(type.includes("rain")){
+    document.body.style.background="linear-gradient(120deg,#141e30,#243b55)";
+    makeRain();
+  }
+  else if(type.includes("cloud")){
+    document.body.style.background="linear-gradient(120deg,#485563,#29323c)";
+  }
+  else if(type.includes("night")){
+    document.body.style.background="linear-gradient(120deg,#0f2027,#000)";
+  }
+  else{
+    document.body.style.background="linear-gradient(120deg,#2980b9,#6dd5fa)";
+  }
+}
+
+// RAIN EFFECT
+function makeRain(){
+  rainInterval = setInterval(()=>{
+    const drop = document.createElement("div");
+    drop.className = "drop";
+    drop.style.left = Math.random()*100+"vw";
+    drop.style.animationDuration = (0.5 + Math.random())+"s";
+    document.body.appendChild(drop);
+    setTimeout(()=>drop.remove(),2000);
+  },80);
+}
+function clearRain(){
+  clearInterval(rainInterval);
+  document.querySelectorAll(".drop").forEach(d=>d.remove());
+}
+
+// WEATHER API
+async function loadWeather(){
+  let city = cityInput.value || "Islamabad";
+  try{
+    let res = await fetch(
+      `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`
+    );
+    let d = await res.json();
+    if(d.cod != 200) return alert("City not found");
+
+    cityEl.innerText = d.name;
+    tempEl.innerText = Math.round(d.main.temp)+"°C";
+    descEl.innerText = d.weather[0].description;
+
+    changeBackground(d.weather[0].description);
+  }catch{
+    alert("Network error");
+  }
+}
+
+btn.onclick = loadWeather;
+loadWeather();
+</script>
+
+</body>
+</html>
