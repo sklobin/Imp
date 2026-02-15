@@ -6,7 +6,7 @@
   <title>Ramzan Mubarak</title>
 
   <!-- Islamic Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Amiri:ital,wght@0,400;0,700;1,400&family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
@@ -21,7 +21,6 @@
       font-family:'Poppins',sans-serif;
     }
 
-    /* subtle mosque pattern */
     body::before{
       content:"";
       position:absolute;
@@ -59,6 +58,7 @@
       margin-bottom:6px;
       color:#ffd369;
       letter-spacing:1px;
+      font-family:'Noto Nastaliq Urdu',serif;
     }
 
     .bismillah{
@@ -71,8 +71,10 @@
 
     p{
       font-size:15px;
-      line-height:1.9;
+      line-height:2.1;
       opacity:.95;
+      font-family:'Noto Nastaliq Urdu',serif;
+      direction:rtl;
     }
 
     .timer-title{
@@ -80,6 +82,7 @@
       font-size:17px;
       color:#ffd369;
       letter-spacing:.5px;
+      font-family:'Noto Nastaliq Urdu',serif;
     }
 
     .timer{
@@ -101,28 +104,35 @@
       font-size:22px;
       font-weight:600;
       color:#fff;
+      font-family:'Poppins',sans-serif;
     }
 
     .time-box small{
       font-size:11px;
       opacity:.8;
+      font-family:'Noto Nastaliq Urdu',serif;
     }
 
     .section{
       margin-top:20px;
       background:linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03));
       border-radius:18px;
-      padding:16px 14px;
+      padding:16px 14px 18px;
       text-align:right;
       border:1px solid rgba(255,211,105,0.22);
     }
 
+    /* Green heading strip only */
     .section h2{
       font-size:18px;
-      color:#ffd369;
-      margin-bottom:10px;
+      color:#ffffff;
+      margin:-16px -14px 12px;
+      padding:10px 8px;
       text-align:center;
-      letter-spacing:.5px;
+      font-family:'Noto Nastaliq Urdu',serif;
+      background:linear-gradient(180deg,#1fd66b,#0fa958);
+      border-radius:16px 16px 10px 10px;
+      text-shadow:0 2px 6px rgba(0,0,0,0.4);
     }
 
     .arabic{
@@ -135,26 +145,29 @@
 
     .urdu{
       margin-top:8px;
-      font-size:14px;
-      opacity:.9;
-      line-height:1.9;
+      font-size:15px;
+      opacity:.95;
+      line-height:2.2;
+      font-family:'Noto Nastaliq Urdu',serif;
+      direction:rtl;
     }
 
     ul{
       padding-right:20px;
-      font-size:14px;
-      line-height:2;
+      font-size:15px;
+      line-height:2.3;
+      font-family:'Noto Nastaliq Urdu',serif;
+      direction:rtl;
     }
 
-    ul li::marker{
-      color:#ffd369;
-    }
+    ul li::marker{color:#ffd369}
 
     footer{
       margin-top:20px;
       font-size:12px;
       opacity:.7;
       text-align:center;
+      font-family:'Poppins',sans-serif;
     }
 
     @keyframes fadeIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
@@ -168,9 +181,12 @@
 
 <script>
 for(let i=0;i<90;i++){
- const s=document.createElement('div');s.className='star';
- s.style.top=Math.random()*100+'%';s.style.left=Math.random()*100+'%';
- s.style.animationDuration=(1+Math.random()*3)+'s';document.body.appendChild(s);
+ const s=document.createElement('div');
+ s.className='star';
+ s.style.top=Math.random()*100+'%';
+ s.style.left=Math.random()*100+'%';
+ s.style.animationDuration=(1+Math.random()*3)+'s';
+ document.body.appendChild(s);
 }
 </script>
 
@@ -225,15 +241,25 @@ for(let i=0;i<90;i++){
 
 <script>
 const targetDate=new Date(new Date().getFullYear(),1,19,5,0,0);
+
 function updateTimer(){
- const now=new Date(),diff=targetDate-now;
- if(diff<=0){document.querySelector('.timer-title').innerText='🌙 پہلا روزہ مبارک ہو';return}
- document.getElementById('days').innerText=Math.floor(diff/86400000);
- document.getElementById('hours').innerText=Math.floor(diff/3600000)%24;
- document.getElementById('minutes').innerText=Math.floor(diff/60000)%60;
- document.getElementById('seconds').innerText=Math.floor(diff/1000)%60;
+ const now=new Date();
+ const diff=targetDate-now;
+ if(diff<=0){
+   document.querySelector('.timer-title').innerText='🌙 پہلا روزہ مبارک ہو';
+   return;
+ }
+ const days=Math.floor(diff/86400000);
+ const hours=Math.floor(diff/3600000)%24;
+ const minutes=Math.floor(diff/60000)%60;
+ const seconds=Math.floor(diff/1000)%60;
+ document.getElementById('days').innerText=days;
+ document.getElementById('hours').innerText=hours;
+ document.getElementById('minutes').innerText=minutes;
+ document.getElementById('seconds').innerText=seconds;
 }
-setInterval(updateTimer,1000);updateTimer();
+setInterval(updateTimer,1000);
+updateTimer();
 </script>
 
 </body>
