@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ramzan Mubarak</title>
+
+  <!-- Islamic Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:radial-gradient(circle at top,#1b3a2f,#0b1f17 60%,#060f0b 100%);
+      color:#f5f5f5;
+      overflow:hidden;
+      font-family:'Poppins',sans-serif;
+    }
+
+    /* subtle mosque pattern */
+    body::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background-image:radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size:22px 22px;
+      opacity:0.3;
+    }
+
+    .card{
+      position:relative;
+      background:linear-gradient(180deg,rgba(255,255,255,0.10),rgba(255,255,255,0.03));
+      backdrop-filter:blur(12px);
+      border-radius:24px;
+      padding:36px 30px;
+      text-align:center;
+      max-width:520px;
+      width:92%;
+      box-shadow:0 25px 70px rgba(0,0,0,0.55);
+      animation:fadeIn 1.5s ease;
+      overflow-y:auto;
+      max-height:92vh;
+      border:1px solid rgba(255,211,105,0.25);
+    }
+
+    .moon{
+      font-size:64px;
+      margin-bottom:6px;
+      animation:float 4s ease-in-out infinite;
+      filter:drop-shadow(0 0 10px rgba(255,211,105,0.6));
+    }
+
+    h1{
+      font-size:34px;
+      margin-bottom:6px;
+      color:#ffd369;
+      letter-spacing:1px;
+    }
+
+    .bismillah{
+      font-family:'Amiri',serif;
+      font-size:22px;
+      margin-bottom:10px;
+      color:#e6c98a;
+      direction:rtl;
+    }
+
+    p{
+      font-size:15px;
+      line-height:1.9;
+      opacity:.95;
+    }
+
+    .timer-title{
+      margin-top:18px;
+      font-size:17px;
+      color:#ffd369;
+      letter-spacing:.5px;
+    }
+
+    .timer{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:10px;
+      margin-top:14px;
+    }
+
+    .time-box{
+      background:linear-gradient(180deg,rgba(0,0,0,0.45),rgba(0,0,0,0.25));
+      border-radius:14px;
+      padding:10px 6px;
+      border:1px solid rgba(255,211,105,0.25);
+    }
+
+    .time-box span{
+      display:block;
+      font-size:22px;
+      font-weight:600;
+      color:#fff;
+    }
+
+    .time-box small{
+      font-size:11px;
+      opacity:.8;
+    }
+
+    .section{
+      margin-top:20px;
+      background:linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03));
+      border-radius:18px;
+      padding:16px 14px;
+      text-align:right;
+      border:1px solid rgba(255,211,105,0.22);
+    }
+
+    .section h2{
+      font-size:18px;
+      color:#ffd369;
+      margin-bottom:10px;
+      text-align:center;
+      letter-spacing:.5px;
+    }
+
+    .arabic{
+      font-family:'Amiri',serif;
+      font-size:20px;
+      line-height:2.2;
+      direction:rtl;
+      color:#fff;
+    }
+
+    .urdu{
+      margin-top:8px;
+      font-size:14px;
+      opacity:.9;
+      line-height:1.9;
+    }
+
+    ul{
+      padding-right:20px;
+      font-size:14px;
+      line-height:2;
+    }
+
+    ul li::marker{
+      color:#ffd369;
+    }
+
+    footer{
+      margin-top:20px;
+      font-size:12px;
+      opacity:.7;
+      text-align:center;
+    }
+
+    @keyframes fadeIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+
+    .star{position:absolute;width:2px;height:2px;background:#fff;opacity:.6;animation:twinkle 2s infinite alternate}
+    @keyframes twinkle{from{opacity:.2}to{opacity:1}}
+  </style>
+</head>
+<body>
+
+<script>
+for(let i=0;i<90;i++){
+ const s=document.createElement('div');s.className='star';
+ s.style.top=Math.random()*100+'%';s.style.left=Math.random()*100+'%';
+ s.style.animationDuration=(1+Math.random()*3)+'s';document.body.appendChild(s);
+}
+</script>
+
+<div class="card">
+  <div class="moon">🌙</div>
+  <div class="bismillah">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ</div>
+  <h1>رمضان مبارک</h1>
+  <p>اللہ تعالیٰ آپ کو اس بابرکت مہینے میں ایمان، صبر اور تقویٰ کی دولت عطا فرمائے۔</p>
+
+  <div class="timer-title">پہلے روزے میں باقی وقت</div>
+  <div class="timer">
+    <div class="time-box"><span id="days">0</span><small>دن</small></div>
+    <div class="time-box"><span id="hours">0</span><small>گھنٹے</small></div>
+    <div class="time-box"><span id="minutes">0</span><small>منٹ</small></div>
+    <div class="time-box"><span id="seconds">0</span><small>سیکنڈ</small></div>
+  </div>
+
+  <div class="section">
+    <h2>سحری کی دعا</h2>
+    <div class="arabic">وَبِصَوْمِ غَدٍ نَّوَيْتُ مِنْ شَهْرِ رَمَضَانَ</div>
+    <div class="urdu">میں نے ماہِ رمضان کے کل کے روزے کی نیت کی۔</div>
+  </div>
+
+  <div class="section">
+    <h2>افطار کی دعا</h2>
+    <div class="arabic">اللَّهُمَّ إِنِّي لَكَ صُمْتُ وَبِكَ آمَنْتُ وَعَلَيْكَ تَوَكَّلْتُ وَعَلَىٰ رِزْقِكَ أَفْطَرْتُ</div>
+    <div class="urdu">اے اللہ! میں نے تیرے لیے روزہ رکھا، تجھ پر ایمان لایا اور تیرے ہی رزق سے افطار کیا۔</div>
+  </div>
+
+  <div class="section">
+    <h2>رمضان کی فضیلت</h2>
+    <ul>
+      <li>رمضان اسلام کا تیسرا رکن ہے۔</li>
+      <li>اسی مہینے میں قرآن مجید نازل ہوا۔</li>
+      <li>جنت کے دروازے کھول دیے جاتے ہیں۔</li>
+      <li>شیطان قید کر دیے جاتے ہیں۔</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>رمضان میں نیک اعمال</h2>
+    <ul>
+      <li>نماز اور تراویح کی پابندی</li>
+      <li>کثرت سے تلاوتِ قرآن</li>
+      <li>صدقہ، خیرات اور زکوٰۃ</li>
+      <li>ذکر، دعا اور استغفار</li>
+    </ul>
+  </div>
+
+  <footer>© 2026 • Ramzan Mubarak</footer>
+</div>
+
+<script>
+const targetDate=new Date(new Date().getFullYear(),1,19,5,0,0);
+function updateTimer(){
+ const now=new Date(),diff=targetDate-now;
+ if(diff<=0){document.querySelector('.timer-title').innerText='🌙 پہلا روزہ مبارک ہو';return}
+ document.getElementById('days').innerText=Math.floor(diff/86400000);
+ document.getElementById('hours').innerText=Math.floor(diff/3600000)%24;
+ document.getElementById('minutes').innerText=Math.floor(diff/60000)%60;
+ document.getElementById('seconds').innerText=Math.floor(diff/1000)%60;
+}
+setInterval(updateTimer,1000);updateTimer();
+</script>
+
+</body>
+</html>
