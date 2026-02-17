@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HTML Obfuscator Tool</title>
+<style>
+body { font-family: Arial, sans-serif; background:#f0f2f5; padding:20px; display:flex; flex-direction:column; align-items:center; }
+textarea { width:90%; max-width:900px; height:200px; margin:10px 0; padding:10px; font-family: monospace; font-size:13px; border:1px solid #ccc; border-radius:5px; }
+button { background:#007bff; color:white; border:none; padding:10px 20px; border-radius:5px; cursor:pointer; font-size:16px; margin-bottom:10px; }
+button:hover { background:#0056b3; }
+#output { width:90%; max-width:900px; height:200px; padding:10px; border:1px solid #ccc; border-radius:5px; background:#e9ecef; font-family: monospace; font-size:13px; white-space:pre-wrap; overflow:auto; }
+</style>
+</head>
+<body>
+
+<h1>HTML Obfuscator Tool</h1>
+<textarea id="inputHtml" placeholder="Paste your HTML here..."></textarea>
+<button onclick="obfuscateHTML()">Obfuscate HTML</button>
+<textarea id="output" readonly placeholder="Obfuscated HTML will appear here..."></textarea>
+
+<script>
+function obfuscateHTML() {
+    let html = document.getElementById('inputHtml').value;
+
+    // Step 1: Remove comments & extra whitespace (minify)
+    html = html.replace(/<!--[\s\S]*?-->/g, '');
+    html = html.replace(/>\s+</g,'><');
+    html = html.replace(/^\s+|\s+$/g,'');
+    html = html.replace(/\s{2,}/g,' ');
+    html = html.replace(/[\n\r\t]+/g,'');
+
+    // Step 2: Convert each character to its char code
+    let charCodes = [];
+    for (let i=0; i<html.length; i++) {
+        charCodes.push(html.charCodeAt(i));
+    }
+
+    // Step 3: Wrap in a JS decoder
+    let obfuscated = `<script>
+(function(){
+    let chars = [${charCodes.join(',')}];
+    let out='';
+    for(let i=0;i<chars.length;i++){out+=String.fromCharCode(chars[i]);}
+    document.write(out);
+})();
+<\/script>`;
+
+    document.getElementById('output').value = obfuscated;
+}
+</script>
+
+</body>
+</html>
