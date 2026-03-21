@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eid Card Generator</title>
+
+<style>
+body{
+    background:#0f172a;
+    color:white;
+    font-family:Arial;
+    padding:20px;
+}
+
+.container{
+    max-width:1000px;
+    margin:auto;
+}
+
+.card-box{
+    display:flex;
+    flex-wrap:wrap;
+    gap:20px;
+}
+
+.controls{
+    flex:1;
+    min-width:300px;
+}
+
+.preview{
+    flex:1;
+    min-width:300px;
+    text-align:center;
+}
+
+input, textarea, select{
+    width:100%;
+    padding:10px;
+    margin-top:5px;
+    margin-bottom:15px;
+    border-radius:8px;
+    border:none;
+    outline:none;
+}
+
+button{
+    background:#10b981;
+    color:white;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    width:100%;
+    font-weight:bold;
+}
+
+button:hover{
+    background:#059669;
+}
+
+canvas{
+    background:black;
+    border-radius:15px;
+    max-width:100%;
+}
+
+.color-box{
+    display:flex;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.color{
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    cursor:pointer;
+    border:2px solid white;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>🌙 Eid Card Generator</h1>
+
+    <div class="card-box">
+
+        <!-- LEFT -->
+        <div class="controls">
+
+            <label>To</label>
+            <input type="text" id="to" placeholder="Ahmad">
+
+            <label>From</label>
+            <input type="text" id="from" placeholder="Your Name">
+
+            <label>Message</label>
+            <textarea id="message">Eid Mubarak {{to}}! 🎉</textarea>
+
+            <label>Font</label>
+            <select id="font">
+                <option>Georgia</option>
+                <option>Arial</option>
+                <option>Courier New</option>
+                <option>Times New Roman</option>
+            </select>
+
+            <label>Text Color</label>
+            <div class="color-box">
+                <div class="color" style="background:white" data="white"></div>
+                <div class="color" style="background:yellow" data="yellow"></div>
+                <div class="color" style="background:#00ffcc" data="#00ffcc"></div>
+                <div class="color" style="background:pink" data="pink"></div>
+            </div>
+
+            <label>Background Color</label>
+            <div class="color-box">
+                <div class="color" style="background:#064e3b" data="#064e3b"></div>
+                <div class="color" style="background:#1e1b4b" data="#1e1b4b"></div>
+                <div class="color" style="background:#000000" data="#000000"></div>
+                <div class="color" style="background:#7c2d12" data="#7c2d12"></div>
+            </div>
+
+            <button onclick="downloadCard()">Download Card</button>
+
+        </div>
+
+        <!-- RIGHT -->
+        <div class="preview">
+            <canvas id="canvas" width="800" height="500"></canvas>
+        </div>
+
+    </div>
+</div>
+
+<script>
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+let bgColor = "#064e3b";
+let textColor = "white";
+let font = "Georgia";
+
+// DRAW FUNCTION
+function draw(){
+    let to = document.getElementById("to").value || "Friend";
+    let from = document.getElementById("from").value || "Your Name";
+    let message = document.getElementById("message").value;
+
+    message = message.replace("{{to}}", to).replace("{{from}}", from);
+
+    // clear
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    // background
+    ctx.fillStyle = bgColor;
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    ctx.fillStyle = textColor;
+    ctx.textAlign = "center";
+
+    // title
+    ctx.font = "bold 50px " + font;
+    ctx.fillText("Eid Mubarak 🌙", canvas.width/2, 100);
+
+    // to
+    ctx.font = "30px " + font;
+    ctx.fillText("To: " + to, canvas.width/2, 180);
+
+    // message
+    ctx.font = "26px " + font;
+    wrapText(message, canvas.width/2, 260, 600, 30);
+
+    // from
+    ctx.font = "28px " + font;
+    ctx.fillText("From: " + from, canvas.width/2, 420);
+}
+
+// TEXT WRAP
+function wrapText(text, x, y, maxWidth, lineHeight){
+    let words = text.split(" ");
+    let line = "";
+
+    for(let i=0;i<words.length;i++){
+        let testLine = line + words[i] + " ";
+        let width = ctx.measureText(testLine).width;
+
+        if(width > maxWidth && i>0){
+            ctx.fillText(line, x, y);
+            line = words[i] + " ";
+            y += lineHeight;
+        } else {
+            line = testLine;
+        }
+    }
+    ctx.fillText(line, x, y);
+}
+
+// COLOR EVENTS
+document.querySelectorAll(".color").forEach(el=>{
+    el.onclick = ()=>{
+        if(el.parentElement.previousElementSibling.innerText.includes("Text")){
+            textColor = el.getAttribute("data");
+        } else {
+            bgColor = el.getAttribute("data");
+        }
+        draw();
+    }
+});
+
+// FONT CHANGE
+document.getElementById("font").onchange = (e)=>{
+    font = e.target.value;
+    draw();
+};
+
+// LIVE UPDATE
+document.querySelectorAll("input, textarea").forEach(el=>{
+    el.addEventListener("input", draw);
+});
+
+// DOWNLOAD
+function downloadCard(){
+    let link = document.createElement("a");
+    link.download = "eid-card.png";
+    link.href = canvas.toDataURL();
+    link.click();
+}
+
+// INIT
+draw();
+</script>
+
+</body>
+</html>
