@@ -232,12 +232,18 @@ function generate(){
       ctx.fillText(line.trim(), 540, startY + i * lineHeight);
     });
 
-    // SK WRITES watermark neeche
-    ctx.shadowBlur = 0; // shadow hatado watermark se
-    ctx.font = '500 45px "Noto Nastaliq Urdu"';
-    ctx.fillStyle = 'rgba(255,255,255,0.85)';
-    ctx.fillText('SK WRITES', 540, 1850);
-  }
+    // SK WRITES watermark - quote ke bilkul neeche
+ctx.shadowBlur = 0; 
+ctx.font = '500 45px "Noto Nastaliq Urdu"';
+ctx.fillStyle = 'rgba(255,255,255,0.85)';
+
+// Watermark Y position = last line + 80px gap
+let watermarkY = startY + (lines.length * lineHeight) + 80;
+
+// Agar neeche jagah kam ho to canvas se bahar na jaye
+if(watermarkY > 1900) watermarkY = 1900;
+
+ctx.fillText('SK WRITES', 540, watermarkY);
 
   img.onerror = function(){
     alert('Background load nahi hui, dobara try karein');
