@@ -245,9 +245,11 @@ if(watermarkY > 1900) watermarkY = 1900;
 
 ctx.fillText('SK WRITES', 540, watermarkY);
 
-  img.onerror = function(){
-    alert('Background load nahi hui, dobara try karein');
-  }
+} // <-- YE BRACKET ADD KARO - img.onload yahan close hoga
+
+img.onerror = function(){
+  alert('Background load nahi hui, dobara try karein');
+}
 }
 
 function download(){
